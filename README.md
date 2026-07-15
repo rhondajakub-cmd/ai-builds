@@ -33,18 +33,6 @@ A four-skill research pipeline with persistent memory: load prior knowledge → 
 
 Agent: [competitive-intelligence-agent.md](competitive-intelligence/competitive-intelligence-agent.md)
 
-## Talent-Market Intelligence
-
-Scheduled agents that watch the senior People & Talent market — who's hiring, who's landing where, and what's changing across a target list of companies.
-
-- [nyc-board-agent](market-intelligence/nyc-board-agent/SKILL.md) — weekly sweep of VC portfolio job boards (direct JSON APIs → SSR pages → search fallback), emailed as a digest ([agent file](market-intelligence/nyc-board-agent-agent.md))
-- [vc-talent-agent](market-intelligence/vc-talent-agent/SKILL.md) — senior People/Talent hiring across top VC firms and portfolios
-- [cpo-tracker](market-intelligence/cpo-tracker/SKILL.md) — tracks new CPO / Head of People placements, logs to Notion
-
-## Productivity
-
-- [daily-briefing](productivity/daily-briefing/SKILL.md) · [rj-morning-command-center-8am](productivity/rj-morning-command-center-8am/SKILL.md) · [weekly-planner](productivity/weekly-planner/SKILL.md) · [ss](productivity/ss/SKILL.md) (screenshot shorthand)
-
 ---
 
 Built with [Claude](https://claude.com/claude-code). Skills follow the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills) format — a `SKILL.md` with frontmatter description plus instructions — and run in Claude Code, Claude Desktop, and Cowork.
