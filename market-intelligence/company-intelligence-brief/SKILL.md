@@ -1,165 +1,145 @@
 ---
-name: active-search-intelligence-brief
+name: company-intelligence-brief
 description: >
-  Weekly intelligence brief on a target list of companies RJ tracks.
-  Auto-infers the pipeline from Granola meetings and Gmail threads, then scans
-  for funding news, leadership changes, and product launches over the last 7 days
-  per company. Drafts a Gmail email to RJ so it lands in her inbox Monday morning.
-  Use when RJ says "run my search brief", "Monday search brief", "what's new with
-  my interview companies", "pipeline intel", or when triggered by the scheduled
-  task "Active Search Intelligence Brief" on Monday mornings.
-user-invocable: true
-version: v1.0 · 2026-04-23
+  Produces a fast, defensible intelligence brief on a single company. Pulls a
+  fixed set of dimensions — snapshot (founded, HQ, offices, headcount, funding),
+  what they do in plain terms, founders & leadership, leadership & org signals,
+  investors & funding, profitability & clients, competitors, product, and how
+  they hire — plus a rigorous AI-native assessment (is AI genuinely core to the
+  product and company, or bolted on?). Ends with a clear signal read.
 ---
 
-# Active Search Intelligence Brief
+# Company Intelligence Brief
 
-Scan a target list of companies RJ tracks, surface material news from the past 7 days, and draft a Monday morning email brief. The goal: RJ walks into every Monday sharper on every target company, with funding context, leadership movement, and product launches already loaded.
+A fast, defensible read on a single company. One company at a time. The output
+is a scannable brief with a clear signal, not a data dump.
 
-## Critical Rules (from RJ's CLAUDE.md)
+## Operating rules
 
-- **Accuracy.** Only present what was reported or announced. Use quotes where meaningful. Separate inferences with explicit labels: "I am inferring that..." or "Based on reporting, I suggest..." Never editorialize as fact.
-- **Voice.** Peer-level, confident, matter-of-fact. No hype words, no breathless framing, no em dashes.
-- **Cite everything.** Every claim gets a source link. If a claim cannot be sourced, drop it.
+- **Accuracy over completeness.** Only present what is reported or on the record.
+  If a data point cannot be found, say "Not found" — never guess a headcount, a
+  funding figure, or a founder name.
+- **Cite everything.** Every non-obvious claim gets an inline source link.
+- **Label inferences.** Separate fact from read: "Reported:..." vs "I'm inferring...".
+- **Voice.** Peer-level, matter-of-fact. No hype words, no breathless framing.
 
-## Instructions
+## Input
 
-### Step 1: Build the active pipeline (auto-infer)
+A company name (and website/URL if provided). If the name is ambiguous, confirm
+which company before researching — match on domain, sector, or HQ.
 
-Pull from two sources in parallel and cross-reference.
+## Research procedure
 
-**Granola source:**
-- Call `list_meetings` for the last 30 days
-- Filter to meetings where title contains "interview" OR a known recruiter / hiring manager is a participant
-- Extract company names from meeting titles (e.g., "Cresta interview with Melissa Bair" → "Cresta")
+Run searches in parallel where possible. Prefer primary sources (company site,
+careers page, founder LinkedIn, filings, reputable press) over aggregators.
 
-**Gmail source:**
-- Call `search_threads` with queries:
-  - `newer_than:30d (interview OR recruiter OR "hiring manager" OR "next steps")`
-  - `newer_than:30d from:(*@greenhouse.io OR *@ashbyhq.com OR *@lever.co)`
-- Extract company signals from thread subjects, sender domains, and signatures
+**Handling conflicting data (common with headcount, revenue, valuation):**
+Aggregators frequently disagree and lag reality. When numbers conflict, surface
+the range, then state the figure from the best-sourced or most recent source and
+label it. Never silently pick one; never average into a fake-precise number.
 
-**Deduplicate and rank:**
-- Merge the two lists. Dedupe by company name.
-- Rank by recency of last activity (last Granola meeting date OR last email date, whichever is newer).
-- Cap at **8 companies** for the brief. If more than 8, prioritize companies with activity in the last 14 days and flag overflow.
-- For each company, capture: company name, latest round / stage, date of last touch, next scheduled interaction if known.
+### 1. Snapshot
+- Founded / age, and who was there at founding.
+- HQ city + country.
+- Known offices; note remote-first / hybrid / in-office model.
+- Headcount + growth direction (surge, steady, layoffs), best-sourced.
+- Funding line: latest round + date + valuation + lead investors.
 
-**Sanity check:** list the companies in the output as a header so RJ can confirm the auto-inference worked. If the list looks wrong on any given Monday, she can correct and re-run.
+### 2. What they do — in plain terms
+One or two sentences a smart non-expert would understand. What the product is,
+who pays, what problem it solves.
 
-### Step 2: Research each company (past 7 days)
+### 3. Founders & leadership
+Founders and backgrounds; call out a shared pedigree if there is one. Note
+marquee execs or notable technical leaders.
 
-For each company on the list, run three targeted web searches. Scope to the last 7 days. Go deeper to 30 days only if the 7-day window returns nothing.
+### 4. Leadership & org signals
+- How the executive bench is built out, and where the gaps are.
+- Note the state of key functions (e.g., is there a Head of People / senior
+  functional leadership, or are roles unfilled at the company's scale?).
+- Read the signal: a missing senior role at scale can indicate an under-built
+  function or a fast-growth gap — name which it looks like and why.
 
-**Funding + financial:**
-- Query: `"[Company]" funding OR raise OR series OR valuation OR acquisition 2026`
-- Cross-check with Crunchbase or TechCrunch if available
-- Look for: new rounds, valuation changes, M&A activity, revenue milestones, layoffs / RIFs
+### 5. Investors & funding
+Total raised, latest round + date + lead investors, valuation, and trajectory
+(up round / flat / down round — trajectory matters more than the absolute number).
 
-**Leadership changes:**
-- Query: `"[Company]" "joins" OR "appointed" OR "new CEO" OR "new CRO" OR "new CHRO" OR "steps down" OR "departs"`
-- Cross-check with LinkedIn company page if surfaced in results
-- Prioritize: CEO, CRO, CPO, CHRO, CFO, Head of People / TA, board-level changes
+### 6. Profitability & clients
+- Profitable, breakeven, or burning? Distinguish "burning with strong traction"
+  from "burning without it." Most private companies won't disclose — say so.
+- Named customers, logos, customer count, case studies. Note if undisclosed.
 
-**Product + launches:**
-- Query: `"[Company]" launch OR announces OR unveils OR releases 2026`
-- Cross-check with company blog / press room via WebFetch if needed
-- Look for: major product announcements, customer wins, pricing shifts, partnership announcements
+### 7. Competitors
+3–5 direct competitors, one line on differentiation. Name both sets if the
+business model is hybrid (e.g., platform + services).
 
-### Step 3: Filter for materiality
+### 8. Product — noteworthy
+Distinctive strengths (technical edge, data moat, delivery model, pricing,
+traction) and notable weaknesses (reviews, incidents, churn, scalability questions).
 
-Not every signal makes the brief. Apply this filter:
+### 9. How they hire — noteworthy
+Interview process, hiring philosophy, unusual practices, and public signal on the
+process (separate from overall employer rating).
 
-**Include if:**
-- Directly relevant to the role RJ is interviewing for (e.g., a new CHRO means her Head of TA role may change shape)
-- Changes the company's trajectory (funding, layoffs, M&A)
-- Gives RJ a talking point or sharper question for her next round
-- Flags risk (leadership exit signaling instability, product miss, competitive loss)
+### 10. AI-native assessment
+Is AI genuinely core to who they are, or is it marketing? Gather evidence, then
+classify. Do NOT take the company's own "AI-powered" copy at face value.
 
-**Exclude if:**
-- Generic industry news not specific to the company
-- Old news re-circulated
-- Minor press / PR filler
+**Evidence:** product (core value prop vs. bolt-on; proprietary/fine-tuned vs.
+wrapper), founding DNA (technical/ML founders? AI from the start or added late?),
+hiring signal (ML/research roles, or "AI" only in marketing?), engineering signal
+(technical blog, papers, model releases, infra).
 
-If a company has zero material signals this week, note it explicitly: "Nothing material in the last 7 days." Do not pad.
+**Classification:**
+- **AI-Native** — built on AI; wouldn't exist without it; ML founding DNA.
+- **AI-Enabled** — real established product that added meaningful, working AI.
+- **AI-Veneer** — "AI" in the copy, thin evidence (wrapper, roadmap promise, buzzword).
+- **Not-AI** — doesn't claim to be, and isn't.
 
-### Step 4: Compose the brief
+**Two distinctions to always draw:** (1) authenticity vs. business model — an
+AI-native firm can still be services-led vs. a product company; say which.
+(2) DNA vs. dependency — AI-native leadership pedigree can coexist with a product
+that's really a data/services platform with AI on top; say which.
 
-**Email structure:**
+Frame the call with evidence and a counter-signal: "Classifying them as [X]
+because [evidence]. Counter-signal: [what cuts the other way]."
+
+## Output format
 
 ```
-Subject: Search Intel Brief, [Date, e.g., April 27]
+# Company Intelligence Brief — [Company]
+[one-line plain-English description] · [website]
 
-Hi RJ,
+## Snapshot
+## What they do
+## Founders & leadership
+## Leadership & org signals
+## Money & clients
+## Competitors
+## Product — noteworthy
+## How they hire — noteworthy
+## AI-native read
+  - Classification + evidence + authenticity-vs-business-model + counter-signal
 
-Weekly intel on your active pipeline. [N] companies covered. [M] flagged for attention.
-
-## Flagged for attention
-[0-3 items, highest priority. Each item: company, signal, why it matters in one line, link.]
-
-## Upcoming this week
-[Any interviews/rounds on your calendar for these companies in the next 7 days, with the most relevant signal to reference.]
-
-## Full pipeline
-
-### [Company 1] — [stage, last touch date]
-- **Funding:** [one line + link] OR "Nothing material."
-- **Leadership:** [one line + link] OR "Nothing material."
-- **Product:** [one line + link] OR "Nothing material."
-- **So what:** [one sentence, peer-level take on why this matters for RJ's process here. If nothing material, omit this line entirely.]
-
-[Repeat per company]
+## Signal — [Watch closely / Monitor / Low priority]
+[2–3 sentences: the company's trajectory, whether the AI story is real, and the
+single biggest open question about the company.]
 
 ---
-
-Sources compiled from: Granola meetings (last 30d), Gmail threads (last 30d), web search (last 7d).
-
-Missing anything? Reply with company names to add or remove.
+Sources: [inline throughout; key ones listed]
+Not found: [dimensions that couldn't be sourced]
 ```
 
-**Voice checks before sending:**
-- No em dashes anywhere
-- No hype words ("incredible," "huge," "massive," "game-changing")
-- "So what" lines are peer-level, not overeager
-- Every claim has a link
-- Inferences are labeled
+## Signal logic
+- **Watch closely** — real product/traction, credible funding trajectory, a
+  genuine AI story, and momentum worth tracking.
+- **Monitor** — promising but a material unknown remains (financial health, the
+  AI claim, or execution). Name the one thing to resolve.
+- **Low priority** — weak signals: AI-veneer, instability (layoffs, down round,
+  leadership churn), or no distinctive edge.
 
-### Step 5: Deliver
-
-**Primary path:** create a Gmail draft addressed to `your-email@example.com`, subject per Step 4, body is the full brief in HTML-friendly formatting (preserve headers and bullets). Use `create_draft` with `to: your-email@example.com`.
-
-**Ideal path (if sending is supported):** send the draft directly so it lands in the inbox Monday 8am. If send is not supported by the connector, the draft is in the Drafts folder and RJ can tap-send from her phone in 2 seconds.
-
-**Backup path:** if Gmail is unavailable, create a Google Doc via `create_file` titled `Search Intel Brief — [Date]` in RJ's Drive, and print the doc link in the chat response.
-
-### Step 6: Log
-
-After delivery, append a one-line entry to a Google Doc called `Search Intel Brief Log`:
-- Date run
-- Number of companies covered
-- Number of flagged items
-- Any pipeline additions or removals vs last week
-
-If the log doc does not exist yet, create it.
-
-## Fallback: zero material signals across the board
-
-If the 7-day window returns nothing material for any company, still send the brief. Use this abbreviated format:
-
-```
-Subject: Search Intel Brief, [Date] — Quiet Week
-
-Hi RJ,
-
-No material news across [N] active companies in the last 7 days. Pipeline steady.
-
-[One-line summary per company with stage + next step, no signals.]
-
-Reply with company names to add or remove.
-```
-
-A quiet week is valuable signal on its own. Do not manufacture news.
-
-## Override: on-demand run
-
-RJ may trigger this skill manually outside the Monday schedule, e.g., before a specific round. If she names a specific company, narrow scope to that single company and research the last 30 days instead of 7. Output can be chat-only (skip the email) if she asks for a quick read.
+## Guardrails
+- One company per run.
+- Never state a headcount, funding figure, or founder name you couldn't source.
+- If the company is early / stealth with little public, say so plainly and set
+  the signal to "Monitor" with the gaps named — don't pad.
