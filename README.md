@@ -33,6 +33,25 @@ A four-skill research pipeline with persistent memory: load prior knowledge → 
 
 Agent: [competitive-intelligence-agent.md](competitive-intelligence/competitive-intelligence-agent.md)
 
+## Recruiter Capacity Model
+
+Takes a req list plus company context and returns a defensible answer to "how many recruiters do we need to hit these hiring goals?" — with every number's provenance labeled. [Case study →](https://rhondajakubportfolio.netlify.app/capacity-model.html)
+
+| Skill | What it does |
+|---|---|
+| [capacity-model](capacity-model/SKILL.md) | Recruiter capacity plan from a req list, with labeled assumptions |
+
+## Talent-Market Intelligence
+
+Scheduled agents that watch the senior People &amp; Talent market across a target list of companies — who's hiring, who's landing where, and what's changing.
+
+| Skill | What it does |
+|---|---|
+| [company-intelligence-brief](market-intelligence/company-intelligence-brief/SKILL.md) | Weekly brief on a target list of companies — funding, leadership moves, product news |
+| [cpo-tracker](market-intelligence/cpo-tracker/SKILL.md) | Tracks new CPO / Head of People placements, logs to Notion |
+| [nyc-board-agent](market-intelligence/nyc-board-agent/SKILL.md) | Weekly sweep of VC portfolio job boards for senior People/Talent roles |
+| [vc-talent-agent](market-intelligence/vc-talent-agent/SKILL.md) | Senior People/Talent openings across top VC firms and portfolios |
+
 ---
 
 Built with [Claude](https://claude.com/claude-code). Skills follow the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills) format — a `SKILL.md` with frontmatter description plus instructions — and run in Claude Code, Claude Desktop, and Cowork.
