@@ -15,7 +15,6 @@ Five chained skills that map the talent market for a role — how many qualified
 | [talent-map](talent-intelligence-agent/talent-map/SKILL.md) | Market sizing, supply/demand, comp benchmarks, common backgrounds |
 | [target-company-builder](talent-intelligence-agent/target-company-builder/SKILL.md) | Ranked target companies with funding, headcount, and hiring signals |
 | [candidate-sourcing-ranking](talent-intelligence-agent/candidate-sourcing-ranking/SKILL.md) | ICP + tiered Boolean strings; live LinkedIn validation to a named shortlist |
-| [people-leader-role-watcher](talent-intelligence-agent/people-leader-role-watcher/SKILL.md) | Watches for senior People/Talent openings |
 | [talent-intelligence-agent](talent-intelligence-agent/talent-intelligence-agent/SKILL.md) | Orchestrator — one command runs the chain end to end |
 
 Architecture notes: [ARCHITECTURE.md](talent-intelligence-agent/ARCHITECTURE.md)
