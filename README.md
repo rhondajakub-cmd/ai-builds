@@ -49,8 +49,7 @@ Scheduled agents that watch the senior People &amp; Talent market across a targe
 |---|---|
 | [company-intelligence-brief](market-intelligence/company-intelligence-brief/SKILL.md) | Weekly brief on a target list of companies — funding, leadership moves, product news |
 | [cpo-tracker](market-intelligence/cpo-tracker/SKILL.md) | Tracks new CPO / Head of People placements, logs to Notion |
-| [nyc-board-agent](market-intelligence/nyc-board-agent/SKILL.md) | Weekly sweep of VC portfolio job boards for senior People/Talent roles |
-| [vc-talent-agent](market-intelligence/vc-talent-agent/SKILL.md) | Senior People/Talent openings across top VC firms and portfolios |
+| [vc-talent-radar](market-intelligence/vc-talent-radar/SKILL.md) | Talent-market intelligence: Director+ People/Talent hiring across 50 VC portfolios, platform-routed with verified board endpoints |
 
 ---
 
