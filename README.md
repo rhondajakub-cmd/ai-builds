@@ -8,7 +8,7 @@ Agents and workflows I've built for the real work of talent. I'm a Global People
 
 ## Talent Intelligence Agent
 
-Five chained skills that map the talent market for a role — how many qualified people exist, what they cost, where they sit — then build a target-company list and a named candidate shortlist from a live search. Give it a role and a city; it hands back a sourcing brief a recruiter could pick up. [Case study →](https://rhondajakubportfolio.netlify.app/talent-intelligence-agent.html)
+Five chained skills that map the talent market for a role — how many qualified people exist, what they cost, where they sit — then build a target-company list and a named candidate shortlist from a live search. Give it a job link (Ashby, Greenhouse, Lever), a pasted job description, or just a role and a city; it hands back a sourcing brief a recruiter could pick up. [Case study →](https://rhondajakubportfolio.netlify.app/talent-intelligence-agent.html)
 
 | Skill | What it does |
 |---|---|

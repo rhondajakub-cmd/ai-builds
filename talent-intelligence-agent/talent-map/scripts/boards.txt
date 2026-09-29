@@ -1,0 +1,35 @@
+# Boards scanned by job_board_scan.py. Format: platform:slug. Add boards as new companies matter.
+# Verified loading 2026-09-29.
+ashby:openai
+ashby:perplexity
+ashby:notion
+ashby:ramp
+ashby:harvey
+ashby:cursor
+ashby:elevenlabs
+ashby:cohere
+ashby:linear
+ashby:decagon
+ashby:sierra
+ashby:abridge
+ashby:zip
+ashby:writer
+ashby:cognition
+ashby:plaid
+greenhouse:anthropic
+greenhouse:stripe
+greenhouse:figma
+greenhouse:airbnb
+greenhouse:pinterest
+greenhouse:databricks
+greenhouse:scaleai
+greenhouse:doordashusa
+greenhouse:coinbase
+greenhouse:gusto
+greenhouse:duolingo
+greenhouse:faire
+greenhouse:chime
+greenhouse:okta
+greenhouse:affirm
+greenhouse:xai
+greenhouse:togetherai

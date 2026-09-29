@@ -77,3 +77,17 @@ A market brief that tells a hiring manager:
 - ~~Skill 5 architecture: Claude Agent (autonomous) vs. sequenced Skill chain (deterministic).~~ **Resolved 2026-06-10:** v1 = deterministic sequenced chain with checkpoints (built). Autonomous-agent variant deferred until all 5 skills are hardened.
 - LinkedIn post cadence: one per skill ship vs. batch recap.
 - Notion mirror structure for the build artifacts.
+
+## v1.2 update (2026-09-29): works for any rec
+
+The chain was built and tested on two cases (GTM AI Engineer in NY, ML Scientist in audio in Boston), and parts of it only worked for those. v1.2 removes every role- and city-specific default.
+
+- **Step 0 rec intake.** Start from an Ashby, Greenhouse, or Lever link (`talent-intelligence-agent/scripts/rec_intake.py`), a pasted job description, or a role and location. The orchestrator asks only for what the posting does not answer.
+- **Per-search output folder.** `~/Claude for Builders/10x-TA-Leader/outputs/<Company>-<Role>-<Location>/`.
+- **Live job board check** in Skill 1 (`talent-map/scripts/job_board_scan.py`): posted pay ranges and competing openings from Ashby, Greenhouse, and Lever boards.
+- **Location packs** replace the built-in New York sources (`talent-map/references/location-packs.md`).
+- **Per-search noise filter** in Skill 3, written from the ICP and recorded in the plan. Generic tiers: direct, adjacent, alternate pool.
+- **Bundled LinkedIn scripts** (`candidate-sourcing-ranking/scripts/`) that store results in the browser, so large runs are not lost to tool output truncation, and a verified location code table.
+- **Optional Google Drive handoff** at the end, only on RJ's go.
+
+Skill 4 (voice-matched outreach) is still not built.

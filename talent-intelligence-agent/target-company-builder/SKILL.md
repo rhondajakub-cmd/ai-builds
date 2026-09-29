@@ -1,69 +1,66 @@
 ---
 name: target-company-builder
-description: Build a ranked target-company list — companies matching an archetype, or the enriched employer landscape where a role's talent sits — with funding, headcount, hiring signals, and why-they-fit rationale. Use when RJ wants a target company list, a competitor/poaching map with funding+headcount depth, or to enrich a bare employer list. Triggers on phrases like "build a target company list", "which companies should I target for", "map the companies hiring [role]", "enrich the employer list", "target company builder", "who are the competitors for talent". Skill 2 of the Talent Intelligence Agent chain.
+description: Build a ranked target-company list for any role or company archetype, in any location. Either companies matching an archetype, or the enriched employer landscape where a role's talent sits, with funding, headcount, hiring signals, and why-they-fit rationale. Use when RJ wants a target company list, a poaching map with funding and headcount depth, or to enrich a bare employer list. Triggers on phrases like "build a target company list", "which companies should I target for", "map the companies hiring [role]", "enrich the employer list", "target company builder", "who are the competitors for talent". Skill 2 of the Talent Intelligence Agent chain.
 ---
 
 # Target Company Builder
 
-v1.0 · 2026-06-10
+v1.1 · 2026-09-29
+
+> v1.1 removes built-in New York sources (now a location pack), adds the live job board check for hiring signals, and saves to the per-search folder.
 
 ## Purpose
 
-Produce a ranked, enriched list of target companies — each with funding, headcount, hiring signals, and a why-they-fit rationale — so a recruiter knows not just *which* companies matter but *how to prioritize* them. Skill 2 of the Talent Intelligence Agent chain. Sits between Talent Map (Skill 1) and Candidate Sourcing (Skill 3).
+Produce a ranked, enriched list of target companies, each with funding, headcount, hiring signals, and a why-they-fit rationale, so a recruiter knows which companies matter and how to prioritize them. Skill 2 of the Talent Intelligence Agent chain. Sits between Talent Map (Skill 1) and Candidate Sourcing (Skill 3).
 
 ## Two modes
 
-- **Archetype mode (canonical).** Input a company archetype (e.g., "Series A–C AI startup, NY, 50–500, product-led"). Output a ranked list of matching companies.
-- **Talent-landscape mode.** Input a role + its ecosystem map (from Skill 1). Output the **enriched employer landscape** — the same companies where the role's candidates sit, but upgraded from "name + density" to full funding/headcount/hiring-signal/why-fit depth. This is the mode that enriches Skill 3's lightweight target-employer list.
+- **Archetype mode.** Input a company archetype (for example "Series A to C AI startup, 50 to 500 employees, product-led, in [metro]"). Output a ranked list of matching companies.
+- **Talent-landscape mode.** Input a role and its ecosystem map (Skill 1). Output the enriched employer landscape where the role's candidates sit, upgraded from name and density to funding, headcount, hiring signal, and why-fit. This is the default inside the orchestrator.
 
 ## Inputs
 
 Required:
-- Either a company archetype, or a role + ecosystem map (Skill 1 output)
-- Location / geo focus
+- A company archetype, or a role plus its ecosystem map
+- Location or geo focus
 
 Optional:
 - Stage, headcount, or sector filters
 - Companies to exclude
-- Whether the purpose is poaching (where talent works) vs. demand-mapping (who else hires this role)
+- Purpose: poaching (where talent works) vs demand-mapping (who else hires this role)
+- The hiring company's pay range, to judge approachability
 
 ## Process
 
-1. **Assemble the candidate company set.** Archetype mode: pull from Tech:NYC member list, NYC Startups Airtable, Built In, Crunchbase web results. Talent-landscape mode: start from Skill 1's ecosystem map employers and expand with obvious adjacent players.
-2. **Enrich each company** via web research — funding (latest round, amount, investor, valuation), headcount (and growth trajectory), and **hiring signals** (open roles in the target function, recent funding, expansion announcements, reorgs). Cite each figure.
-3. **Score why-they-fit** for the purpose at hand (poaching density vs. demand match): stage fit, talent density, approachability, and any "why now" signal.
-4. **Rank** by a transparent rule (e.g., poaching mode → talent density × approachability; demand mode → archetype match × hiring intensity).
-5. **Flag data gaps** — private labs and corporates won't have "funding"; note when a figure is unavailable rather than guessing.
-6. Output as a table; save to `/Claude for Builders/10x-TA-Leader/outputs/Target-Companies-[Role-or-Archetype]-[Location].md`, **or** append an identified enrichment layer to an existing Sourcing Plan when run in talent-landscape mode.
+1. **Assemble the company set.** Archetype mode: Built In (city edition), Crunchbase web results, funding news, and the matching location pack in `../talent-map/references/location-packs.md`. Talent-landscape mode: start from Skill 1's ecosystem map and add obvious adjacent players.
+2. **Enrich each company** via web research: funding (latest round, amount, valuation), headcount and direction, and **hiring signals**. Cite each figure with a date. For public companies, prefer SEC filings for headcount and state WARN notices for layoffs.
+3. **Live hiring signals.** Where a company is on Ashby, Greenhouse, or Lever, pull its board (see `../talent-map/scripts/job_board_scan.py`) for open roles in the target function and their posted pay ranges. A competing opening is a demand signal. A layoff or reorg that touched the target function is a supply signal.
+4. **Score** for the purpose at hand. Poaching: talent density (1 to 3) x approachability (1 to 3), plus 1 for a verified "why now" supply signal. Demand: archetype match x hiring intensity. State the rule and the tie-breaks.
+5. **Rank** by the stated rule.
+6. **Flag data gaps.** Mark anything unverified as "not verified" and list it. Never estimate a figure to fill a cell.
+7. **Save** to the search folder as `Target-Companies-<Role-or-Archetype>-<Location>.md`, or append an identified enrichment layer to an existing Sourcing Plan.
 
 ## Output structure
 
-Ranked table: **Company | Stage / Funding | Valuation | Headcount (trajectory) | Hiring signal | Why-they-fit | Rank rationale.**
-
-Plus:
-- **Top picks** — 1–2 line prioritization note for the top 3–5.
-- **Data gaps** — companies where funding/headcount couldn't be verified.
-- **Sources** — cited URLs with dates.
+- **Ranking rule.** The formula and tie-breaks.
+- **Ranked table:** Company | Stage / Funding | Headcount (direction) | Hiring signal | Why they fit | Rank rationale.
+- **Top picks.** One or two lines each for the top 5.
+- **Data gaps.** Every "not verified" figure and single-source claim.
+- **Sources.** Cited URLs with dates.
 
 ## Quality bar
 
-- Every funding/headcount/valuation figure is cited and dated.
-- Private/corporate labs are kept in the list but clearly marked "N/A — corporate" for funding, with headcount/hiring-signal still filled where possible.
-- Ranking rule is stated, not implicit.
-- When enriching an existing list, the new layer is clearly **identified and separated** from the original lite list — never silently merged.
+- Every funding, headcount, and valuation figure is cited and dated.
+- Private labs, corporates, and search firms stay in the list with "N/A" for funding where it does not apply.
+- The ranking rule is stated, not implicit.
+- When enriching an existing list, the new layer is identified and separated, never silently merged.
+- RJ-facing text follows her writing rules: no em or en dashes, plain declarative sentences.
 
-## Sources
+## Examples (not defaults)
 
-- Crunchbase (public web), Tech:NYC member list, NYC Startups Airtable, Built In, company careers pages, funding-news outlets (TechCrunch, Music Business Worldwide, etc.). See `Data-Sources.md`.
-
-## Demo case (canonical test)
-
-- Role: Machine Learning Scientist (generative audio/music), Boston (a Series-D AI startup)
-- Mode: Talent-landscape (enriches the audio-ML employer landscape)
-- Output: appended as an identified enrichment layer in `Sourcing-Plan-ML-Scientist-Audio-Boston.md` (Section 3).
+- Machine Learning Scientist (generative audio/music), Boston, for a Series-D AI startup. Talent-landscape mode. Appended as an enrichment layer in `Sourcing-Plan-ML-Scientist-Audio-Boston.md` (Section 3).
 
 ## Future iterations
 
-- Auto-pull Crunchbase via allowlisted access for live funding data.
-- Cross-reference Tech:NYC + NYC Startups Airtable for NY archetype runs.
-- Add a "hiring intensity" score from live careers-page job counts.
+- Crunchbase access for live funding data.
+- A hiring-intensity score from live careers-page job counts.
